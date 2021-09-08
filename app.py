@@ -1,8 +1,10 @@
 from flask import Flask, jsonify
 import pymongo
 from pymongo import MongoClient
-
+from blueprints.event_blueprint import event_blueprint
 app = Flask(__name__)
+app.register_blueprint(event_blueprint, url_prefix='/event')
+
 
 def get_db():
     client = MongoClient(host='test_mongodb',
@@ -10,7 +12,7 @@ def get_db():
                          username='root', 
                          password='pass',
                         authSource="admin")
-    db = client["animal_db"]
+    db = client["eventravel"]
     return db
 
 @app.route('/')
@@ -22,7 +24,7 @@ def get_stored_animals():
     db=""
     try:
         db = get_db()
-        _animals = db.animal_tb.find()
+        _animals = db.eventravel.find()
         animals = [{"id": animal["id"], "name": animal["name"], "type": animal["type"]} for animal in _animals]
         return jsonify({"animals": animals})
     except:
