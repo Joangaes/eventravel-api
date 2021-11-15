@@ -24,20 +24,18 @@ def ping_server():
 @event_blueprint.route('/',methods=["POST"])
 def saveEvent():
     data = request.json
-    if not EventValidator().validate(data):
-        return Response(response=json.dumps({"Error": "Please provide correct data"}),
-                        status=400,
-                        mimetype='application/json')
+    #if not EventValidator().validate(data):
+    #    return Response(response=json.dumps({"Error": "Please provide correct data"}),
+    #                    status=400,
+    #                    mimetype='application/json')
     try:
         db = get_db()
         db.eventravel.insert_one(data)
         data = json.loads(json_util.dumps(data))
-        db.close()
         return Response(response=json.dumps(data),
                     status=200,
                     mimetype='application/json')
-    except:
-        pass
-    finally:
-        db.close()
+    except Exception as err:
+        print(err)
+        return Response(response=str({'message': 'Could not save the data'}),status=400)
     
