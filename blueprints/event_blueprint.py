@@ -16,6 +16,7 @@ def get_db():
     db = client["eventravel"]
     return db
 
+
 @event_blueprint.route('/')
 def ping_server():
     return "Welcome to the world of events."

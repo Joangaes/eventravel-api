@@ -1,9 +1,11 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify,request,Response
 import pymongo
 from pymongo import MongoClient
 from blueprints.event_blueprint import event_blueprint
+from blueprints.spotify_blueprint import spotify_blueprint
 app = Flask(__name__)
 app.register_blueprint(event_blueprint, url_prefix='/event')
+app.register_blueprint(spotify_blueprint,url_prefix='/spotify')
 
 
 def get_db():
@@ -18,6 +20,8 @@ def get_db():
 @app.route('/')
 def ping_server():
     return "Welcome to the world of animals."
+
+
 
 @app.route('/animals')
 def get_stored_animals():
